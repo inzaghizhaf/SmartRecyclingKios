@@ -1,76 +1,112 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Barcode | Smart Recycling</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
-
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-[#CFDCF6] flex items-center justify-center min-h-screen">
+<body class="bg-[#eefaf0] min-h-screen flex items-center justify-center relative overflow-hidden">
 
-<div class="bg-white p-10 rounded-3xl shadow-xl w-[500px] text-center">
- 
+        <!-- Background Eco -->
+        <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
 
-<h2 class="text-3xl font-bold mt-5">
+        <!-- Daun -->
+        <div class="absolute left-0 bottom-0 opacity-10">
+            <i class="ph-fill ph-leaf text-[260px] text-green-500"></i>
+        </div>
 
-Login dengan Barcode
+        <!-- Recycle -->
+        <div class="absolute right-0 top-16 opacity-10">
+            <i class="ph-fill ph-recycle text-[220px] text-green-500"></i>
+        </div>
 
-</h2>
+        <!-- Titik -->
+        <div class="absolute right-14 top-1/2 -translate-y-1/2 opacity-20">
+            <div class="grid grid-cols-3 gap-2">
+                @for($i=0;$i<18;$i++)
+                    <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                @endfor
+            </div>
+        </div>
 
-<img
-src="{{ asset('images/qrcode.png') }}"
-class="w-72 mx-auto mt-8 border rounded-xl p-3">
+    </div>
+    <!-- Card -->
+    <div class="relative bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl w-[450px] p-10 text-center border border-white">
 
-<p class="mt-6">
+        <h1 class="text-3xl font-bold text-green-700">
+            Login dengan Barcode
+        </h1>
 
-Silakan scan QR menggunakan HP Anda
+        <p class="text-gray-600 mt-2">
+            Scan QR Code menggunakan aplikasi di HP Anda
+        </p>
 
-</p>
+        <!-- QR -->
+        <div class="mt-8 bg-gray-50 rounded-2xl p-5 shadow-inner">
+            <img src="{{ asset('images/qrcode.png') }}"
+                 class="w-64 mx-auto rounded-xl">
+        </div>
 
-<p
-id="status"
-class="mt-4 text-green-600 font-bold">
+        <!-- Status -->
+        <div class="mt-8">
 
-● Menunggu Login....
+            <div class="flex justify-center items-center gap-2">
 
-</p>
+                <span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
 
-<a href="{{ route('login.choice') }}">
+                <span id="status" class="font-semibold text-green-600">
+                    Menunggu Login...
+                </span>
 
-<button
-class="mt-8 bg-red-500 text-white px-8 py-3 rounded-full">
+            </div>
 
-Kembali
+        </div>
 
-</button>
+        <!-- Info -->
+        <div class="mt-6 bg-green-50 rounded-xl p-4 text-sm text-gray-600">
+            Setelah QR berhasil dipindai dan login melalui HP,
+            halaman ini akan otomatis masuk ke Dashboard.
+        </div>
 
-</a>
+        <!-- Button -->
+        <a href="{{ route('login.choice') }}">
+            <button
+                class="mt-8 w-full bg-red-500 hover:bg-red-600 transition text-white font-semibold py-3 rounded-xl shadow-lg">
+                Kembali
+            </button>
+        </a>
 
-</div>
+    </div>
 
 <script>
 
-setInterval(function(){
+setInterval(() => {
 
-fetch("/qr/status")
+    fetch("/qr/status")
+        .then(response => response.json())
+        .then(data => {
 
-.then(res=>res.json())
+            if (data.status === "success") {
 
-.then(data=>{
+                document.getElementById("status").innerHTML =
+                    "✔ Login berhasil, mengalihkan...";
 
-if(data.status=="success"){
+                setTimeout(() => {
+                    window.location.href = "/dashboard";
+                }, 800);
 
-window.location="/dashboard";
+            }
 
-}
+        })
+        .catch(error => console.log(error));
 
-});
-
-},1000);
+}, 2000);
 
 </script>
 
 </body>
-
 </html>

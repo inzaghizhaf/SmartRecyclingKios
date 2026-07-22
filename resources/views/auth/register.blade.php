@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <meta charset="UTF-8">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | SiTukar</title>
@@ -13,13 +15,15 @@
         }
 
         body {
-            background-color: #f0f4f8; /* warna latar lembut */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 1rem;
+            background: linear-gradient(135deg,#eefaf0 0%,#f8fffa 100%);
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            min-height:100vh;
+            padding:1rem;
+            overflow-x:hidden;
+            position:relative;
         }
 
         .logo {
@@ -40,13 +44,20 @@
         }
 
         .register-box {
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            width: 100%;
-            max-width: 380px;
-            border-top: 5px solid #46c43d;
+            background:rgba(255,255,255,.95);
+            backdrop-filter:blur(10px);
+            padding:2rem;
+            border-radius:18px;
+            box-shadow:0 15px 40px rgba(0,0,0,.12);
+            width:100%;
+            max-width:390px;
+            border-top:5px solid #46c43d;
+            transition:.3s;
+        }
+
+        .register-box:hover{
+            transform:translateY(-5px);
+            box-shadow:0 25px 45px rgba(0,0,0,.15)
         }
 
         .register-box h3 {

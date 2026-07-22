@@ -5,14 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Price extends Model
+class AdminActivity extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'price_per_point',
-        'price_per_kg',
-        'description',
+        'admin_id',
+        'activity',
     ];
+
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+    }
 }

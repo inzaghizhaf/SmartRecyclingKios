@@ -12,9 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('points')->default(0)->after('konfigurasi_password');
-            $table->bigInteger('saldo')->default(0)->after('points');
-        });
+
+        if (!Schema::hasColumn('users', 'points')) {
+            $table->integer('points')->default(0);
+        }
+
+        if (!Schema::hasColumn('users', 'saldo')) {
+            $table->bigInteger('saldo')->default(0);
+        }
+
+    });
     }
 
     /**

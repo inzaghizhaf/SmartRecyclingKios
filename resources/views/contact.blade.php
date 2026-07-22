@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Contact Us</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-200 min-h-screen flex flex-col">
+<body class="bg-[#eefaf0] min-h-screen flex flex-col relative overflow-x-hidden">
+
+<div class="fixed inset-0 -z-10 opacity-10 pointer-events-none">
+
+    <div class="absolute left-0 bottom-0">
+        <i class="ph-fill ph-leaf text-[260px] text-green-500"></i>
+    </div>
+
+    <div class="absolute right-0 top-20">
+        <i class="ph-fill ph-recycle text-[220px] text-green-500"></i>
+    </div>
+
+</div>
 
     <!-- Navbar -->
     <nav class="flex justify-between items-center text-white px-6 py-4 shadow-md" style="background-color:#46c43d;">
@@ -16,7 +29,7 @@
                 <img src="{{ asset('images/user-icon.png') }}" alt="User" 
                      class="w-9 h-9 rounded-full border-2 border-white hover:opacity-80 transition">
             </button>
-            <img src="{{ asset('images/srklogo.png') }}" alt="Logo SiTukar" class="w-28 h-auto ml-2">
+            <img src="{{ asset('images/srk2logo.png') }}" alt="Logo SiTukar" class="w-28 h-auto ml-2">
         </div>
 
         <!-- Logout Button -->
@@ -24,7 +37,8 @@
             @csrf
             <button type="button"
                 onclick="confirmLogout()"
-                class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-sm font-semibold">
+                class="bg-red-600 hover:bg-red-600 px-4 py-2 rounded-lg text-sm font-semibold">
+                <i class="ph-fill ph-sign-out"></i>
                 Logout
             </button>
         </form>
@@ -38,11 +52,33 @@
                 <h2 class="font-semibold text-lg text-center">{{ Auth::user()->nama_lengkap }}</h2>
             </div>
             <div class="border-t border-gray-300 my-2"></div>
-            <ul class="space-y-2">
-                <li><a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded hover:bg-blue-100">Dashboard</a></li>
-                <li><a href="{{ url('/list') }}" class="block px-3 py-2 rounded hover:bg-blue-100">List</a></li>
-                <li><a href="{{ url('/contact') }}" class="block px-3 py-2 rounded hover:bg-blue-100">Contact Us</a></li>
-            </ul>
+            <ul class="space-y-1">
+
+            <li>
+                <a href="{{ route('dashboard') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-100">
+                    <i class="ph-fill ph-house text-lg"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url('/list') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-100">
+                    <i class="ph-fill ph-list-bullets text-lg"></i>
+                    List
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url('/contact') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-100">
+                    <i class="ph-fill ph-phone-call text-lg"></i>
+                    Contact Us
+                </a>
+            </li>
+
+        </ul>
         </div>
     </nav>
 
@@ -51,41 +87,73 @@
 
         <!-- Judul Halaman -->
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-[#46c43d]">Menu Contact Us</h1>
+            <h1 class="text-2xl font-bold text-green-600 flex items-center gap-2">
+            Menu Contact Us
+            <i class="ph-fill ph-leaf text-green-500 text-3xl"></i>
+
+        </h1>
         </div>
 
         <!-- Kontak Kami -->
-        <div class="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">Hubungi Kami</h2>
-            <p class="text-gray-600 mb-6">
-                Jika Anda memiliki pertanyaan atau kendala, silakan hubungi kami melalui kontak berikut:
-            </p>
+       <div class="bg-white rounded-3xl shadow-xl p-10 text-center border border-green-100 relative overflow-hidden">
 
-            <div class="flex flex-col md:flex-row justify-center items-center gap-8">
-                <!-- Instagram -->
-                <a href="https://instagram.com/situkaruns" target="_blank"
-                   class="flex items-center bg-[#F3F6FF] hover:bg-[#E0E7FF] px-6 py-3 rounded-xl shadow-md transition border border-[#013FF6]/20">
-                    <img src="{{ asset('images/instagram.webp') }}" alt="Instagram" 
-                         class="w-6 h-6 mr-3">
-                    <span class="text-[#013FF6] font-semibold">Instagram</span>
-                </a>
+        <!-- Ornamen Titik -->
+        <div class="absolute right-5 top-1/2 -translate-y-1/2 grid grid-cols-3 gap-2 opacity-20">
+            @for($i=0;$i<18;$i++)
+                <div class="w-2 h-2 rounded-full bg-green-400"></div>
+            @endfor
+        </div>
 
-                <!-- WhatsApp -->
-                <a href="https://wa.me/6285283968556" target="_blank"
-                   class="flex items-center bg-[#F3F6FF] hover:bg-[#E0E7FF] px-6 py-3 rounded-xl shadow-md transition border border-[#ACEC00]/30">
-                    <img src="{{ asset('images/whatsapp.webp') }}" alt="WhatsApp" 
-                         class="w-6 h-6 mr-3">
-                    <span class="text-green-700 font-semibold">WhatsApp</span>
-                </a>
+        <!-- Icon -->
+        <div class="flex justify-center mb-5">
+            <div class="w-16 h-16 rounded-full bg-green-100 shadow-md flex items-center justify-center">
+                <i class="ph-fill ph-headset text-5xl text-green-600"></i>
             </div>
+        </div>
 
-            <!-- Tambahan Hiasan Bawah -->
-            <div class="mt-8 border-t border-gray-300 pt-4">
-                <p class="text-gray-500 text-sm">
-                    Kami akan dengan senang hati membantu Anda 💬
+        <!-- Judul -->
+        <h2 class="text-2xl font-bold text-gray-800 mb-3">
+            Hubungi Kami
+        </h2>
+        <p class="text-gray-600 mb-8 text-base">
+            Jika Anda memiliki pertanyaan atau kendala, silakan hubungi kami melalui kontak berikut:
+        </p>
+        <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+
+            <!-- Instagram -->
+            <a href="https://instagram.com/situkaruns" target="_blank"
+            class="flex items-center bg-[#F3F6FF] hover:bg-[#E0E7FF] px-6 py-3 rounded-xl shadow-md transition border border-[#013FF6]/20">
+                <img src="{{ asset('images/instagram.webp') }}"
+                    class="w-7 h-7 mr-3">
+
+                <span class="text-[#013FF6] font-semibold text-lg">
+                    Instagram
+                </span>
+            </a>
+
+            <!-- WhatsApp -->
+            <a href="https://wa.me/6285283968556" target="_blank"
+            class="flex items-center bg-[#F3F6FF] hover:bg-[#E0E7FF] px-6 py-3 rounded-xl shadow-md transition border border-[#ACEC00]/30">
+
+                <img src="{{ asset('images/whatsapp.webp') }}"
+                    class="w-7 h-7 mr-3">
+
+                <span class="text-green-700 font-semibold text-lg">
+                    WhatsApp
+                </span>
+            </a>
+        </div>
+
+        <!-- Tambahan Hiasan Bawah -->
+        <div class="mt-8 border-t border-gray-300 pt-5">
+            <div class="flex justify-center items-center gap-3">
+                <i class="ph-fill ph-heart text-2xl text-green-500"></i>
+                <p class="text-gray-500 text-base">
+                    Kami akan dengan senang hati membantu Anda 
                 </p>
             </div>
         </div>
+    </div>
     </main>
 
     <script>

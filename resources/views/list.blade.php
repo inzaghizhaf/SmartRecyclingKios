@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu List</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-200 min-h-screen flex flex-col">
+<body class="bg-[#eefaf0] min-h-screen flex flex-col relative overflow-x-hidden">
+
+<div class="fixed inset-0 -z-10 opacity-10 pointer-events-none">
+
+    <div class="absolute left-0 bottom-0">
+        <i class="ph-fill ph-leaf text-[260px] text-green-500"></i>
+    </div>
+
+    <div class="absolute right-0 top-20">
+        <i class="ph-fill ph-recycle text-[220px] text-green-500"></i>
+    </div>
+
+</div>
+
 
     <!-- Navbar -->
     <nav class="flex justify-between items-center text-white px-6 py-4 shadow-md" style="background-color:#46c43d;">
@@ -15,7 +29,7 @@
             <button onclick="toggleUserMenu()" class="relative focus:outline-none">
                 <img src="{{ asset('images/user-icon.png') }}" alt="User" class="w-9 h-9 rounded-full border-2 border-white hover:opacity-80 transition">
             </button>
-            <img src="{{ asset('images/srklogo.png') }}" alt="Logo SiTukar" class="w-28 h-auto ml-2">
+            <img src="{{ asset('images/srk2logo.png') }}" alt="Logo SiTukar" class="w-28 h-auto ml-2">
         </div>
 
         <!-- Logout Button -->
@@ -23,7 +37,8 @@
             @csrf
             <button type="button"
                 onclick="confirmLogout()"
-                class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-sm font-semibold">
+                class="bg-red-600 hover:bg-red-600 px-4 py-2 rounded-lg text-sm font-semibold">
+                <i class="ph-fill ph-sign-out"></i>
                 Logout
             </button>
         </form>
@@ -35,11 +50,33 @@
                 <h2 class="font-semibold text-lg text-center">{{ Auth::user()->nama_lengkap }}</h2>
             </div>
             <div class="border-t border-gray-300 my-2"></div>
-            <ul class="space-y-2">
-                <li><a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded hover:bg-green-100">Dashboard</a></li>
-                <li><a href="{{ url('/list') }}" class="block px-3 py-2 rounded hover:bg-green-100">List</a></li>
-                <li><a href="{{ url('/contact') }}" class="block px-3 py-2 rounded hover:bg-green-100">Contact Us</a></li>
-            </ul>
+            <ul class="space-y-1">
+
+            <li>
+                <a href="{{ route('dashboard') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-100">
+                    <i class="ph-fill ph-house text-lg"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url('/list') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-100">
+                    <i class="ph-fill ph-list-bullets text-lg"></i>
+                    List
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url('/contact') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-100">
+                    <i class="ph-fill ph-phone-call text-lg"></i>
+                    Contact Us
+                </a>
+            </li>
+
+        </ul>
         </div>
     </nav>
 
@@ -48,7 +85,10 @@
 
         <!-- Judul Halaman -->
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-[#46c43d]">Menu List</h1>
+             <h1 class="text-2xl font-bold text-green-600 flex items-center gap-2">
+            Menu Contact Us
+            <i class="ph-fill ph-leaf text-green-500 text-3xl"></i>
+            </h1>
             <p class="text-white-600 text-sm mt-1">Berikut daftar jenis sampah yang bisa ditukar dengan poin.</p>
         </div>
 
@@ -58,25 +98,25 @@
 
             <div class="flex flex-col gap-6">
                 <!-- Sampah Plastik -->
-                <div class="bg-[#46c43d] p-6 rounded-xl shadow-inner flex flex-col md:flex-row items-center gap-6 border border-[#DCE2FF]">
+                <div class="bg-[#BBF7D0] p-6 rounded-xl shadow-inner flex flex-col md:flex-row items-center gap-6 border border-[#DCE2FF]">
                     <img src="{{ asset('images/plastic-bottles.jpg') }}" 
                          alt="Sampah Plastik" 
                          class="w-48 h-36 object-cover rounded-lg shadow-md border border-[#013FF6]/20">
                     <div class="text-center md:text-left">
-                        <h3 class="text-lg font-semibold text-[#FFFAF0]">Sampah Plastik</h3>
-                        <p class="text-white-700 text-sm mt-1">1 Botol = <span class="font-bold text-[#FFFAF0]">1 Poin</span></p>
+                        <h3 class="text-lg font-semibold text-black">Sampah Plastik</h3>
+                        <p class="text-white-700 text-sm mt-1">1 Botol = <span class="bg-[#46c43d] text-white px-3 py-1 rounded-full font-bold shadow-md">1 Poin</span>
                         <p class="text-white-500 text-sm">(Tidak tergantung satuan ml)</p>
                     </div>
                 </div>
 
                 <!-- Sampah Kaleng -->
-                <div class="bg-[#46c43d] p-6 rounded-xl shadow-inner flex flex-col md:flex-row items-center gap-6 border border-[#DCE2FF]">
+                <div class="bg-[#BBF7D0] p-6 rounded-xl shadow-inner flex flex-col md:flex-row items-center gap-6 border border-[#DCE2FF]">
                     <img src="{{ asset('images/cans.jpg') }}" 
                          alt="Sampah Kaleng" 
                          class="w-48 h-36 object-cover rounded-lg shadow-md border border-[#013FF6]/20">
                     <div class="text-center md:text-left">
-                        <h3 class="text-lg font-semibold text-[#FFFAF0]">Sampah Kaleng</h3>
-                        <p class="text-white-700 text-sm mt-1">1 Kaleng = <span class="font-bold text-[#FFFAF0]">2 Poin</span></p>
+                        <h3 class="text-lg font-semibold text-black">Sampah Kaleng</h3>
+                        <p class="text-white-700 text-sm mt-1">1 Kaleng = <span class="bg-[#46c43d] text-white px-3 py-1 rounded-full font-bold shadow-md">2 Poin</span>
                         <p class="text-white-500 text-sm">(Tidak tergantung satuan ml)</p>
                     </div>
                 </div>

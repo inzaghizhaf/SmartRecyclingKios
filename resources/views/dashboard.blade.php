@@ -1,13 +1,25 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard User</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
-<body class="bg-gray-200 min-h-screen flex flex-col">
+<body class="bg-[#eefaf0] min-h-screen flex flex-col relative overflow-x-hidden">
+
+<div class="fixed inset-0 -z-10 opacity-10 pointer-events-none">
+
+    <div class="absolute left-0 bottom-0">
+        <i class="ph-fill ph-leaf text-[260px] text-green-500"></i>
+    </div>
+
+    <div class="absolute right-0 top-20">
+        <i class="ph-fill ph-recycle text-[220px] text-green-500"></i>
+    </div>
+
+</div>
 
     <!-- Navbar -->
     <nav class="flex justify-between items-center text-white px-6 py-4 shadow-md" style="background-color:#46c43d;">
@@ -16,7 +28,7 @@
             <button onclick="toggleUserMenu()" class="relative focus:outline-none">
                 <img src="{{ asset('images/user-icon.png') }}" alt="User" class="w-9 h-9 rounded-full border-2 border-white hover:opacity-80 transition">
             </button>
-            <img src="{{ asset('images/srklogo.png') }}" alt="Logo SiTukar" class="w-28 h-auto ml-2">
+            <img src="{{ asset('images/srk2logo.png') }}" alt="Logo SiTukar" class="w-28 h-auto ml-2">
         </div>
 
         <!-- User Dropdown Menu -->
@@ -26,11 +38,33 @@
                 <h2 class="font-semibold text-lg text-center">{{ Auth::user()->nama_lengkap }}</h2>
             </div>
             <div class="border-t border-gray-300 my-2"></div>
-            <ul class="space-y-2">
-                <li><a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded hover:bg-blue-100">Dashboard</a></li>
-                <li><a href="{{ url('/list') }}" class="block px-3 py-2 rounded hover:bg-blue-100">List</a></li>
-                <li><a href="{{ url('/contact') }}" class="block px-3 py-2 rounded hover:bg-blue-100">Contact Us</a></li>
-            </ul>
+            <ul class="space-y-1">
+
+            <li>
+                <a href="{{ route('dashboard') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-100">
+                    <i class="ph-fill ph-house text-lg"></i>
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url('/list') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-100">
+                    <i class="ph-fill ph-list-bullets text-lg"></i>
+                    List
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url('/contact') }}"
+                class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-100">
+                    <i class="ph-fill ph-phone-call text-lg"></i>
+                    Contact Us
+                </a>
+            </li>
+
+        </ul>
         </div>
     </nav>
 
@@ -38,7 +72,10 @@
     <main class="flex-1 container mx-auto px-6 py-10">
         <!-- Judul -->
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-[#46c43d]">Menu Dashboard</h1>
+             <h1 class="text-2xl font-bold text-green-600 flex items-center gap-2">
+            Menu Dashboard
+            <i class="ph-fill ph-leaf text-green-500 text-3xl"></i>
+            </h1>
         </div>
 
          <!-- Notifikasi Hijau/Merah -->
@@ -61,13 +98,24 @@
 
             <!-- Total Poin dan Saldo -->
             <div class="bg-blue-50 p-6 rounded-xl shadow-inner border border-blue-100 relative">
-                <p id="totalPoin" class="text-6xl font-bold text-[#013FF6] mt-2">{{ $user->points }}</p>
-                <p class="text-gray-600 text-sm mt-2 mb-6">
-                    Saldo yang Didapatkan:
-                    <span id="saldo" class="text-green-600 font-semibold">
-                        Rp {{ number_format($user->balance, 0, ',', '.') }}
-                    </span>
-                </p>
+                <div class="flex items-center gap-6">
+                    <!-- Icon -->
+                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-200 shadow-lg flex items-center justify-center">
+                        <i class="ph-fill ph-wallet text-4xl text-blue-600"></i>
+                    </div>
+                    <!-- Informasi -->
+                    <div>
+                        <p class="text-gray-600 text-lg font-medium">
+                            Saldo yang Didapatkan
+                        </p>
+                        <h2 id="totalPoin" class="text-5xl font-bold text-[#013FF6] leading-none">
+                            {{ $user->points }}
+                        </h2>
+                        <p id="saldo" class="text-2xl font-bold text-green-600 mt-2">
+                            Rp {{ number_format($user->balance,0,',','.') }}
+                        </p>
+                    </div>
+                </div>
 
 
                 <!-- Tombol Tarik Saldo -->
@@ -86,6 +134,246 @@
             </div>
         </div>
 
+       <!-- ========================= -->
+        <!-- Carbon Footprint -->
+        <!-- ========================= -->
+
+        <section class="relative overflow-hidden bg-gradient-to-br from-white via-green-50 to-white rounded-3xl shadow-xl border border-green-100 p-8 mt-8">
+
+            <!-- Background Decoration -->
+            <div class="absolute -right-10 -top-10 opacity-10">
+                <i class="ph-fill ph-leaf text-[220px] text-green-600"></i>
+            </div>
+
+            <!-- Header -->
+            <div class="flex flex-col lg:flex-row justify-between lg:items-center gap-4">
+
+                <div class="flex items-center gap-4">
+
+                    <div class="w-16 h-16 rounded-2xl bg-green-100 flex items-center justify-center shadow">
+                        <i class="ph-fill ph-leaf text-4xl text-[#46c43d]"></i>
+                    </div>
+
+                    <div>
+
+                        <h2 class="text-2xl font-bold text-grey-800">
+                            Jejak Karbon Anda
+                        </h2>
+
+                        <p class="text-gray-600 text-base">
+                            Dampak positif dari aktivitas daur ulang Anda
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <span
+                    class="inline-flex items-center gap-2 bg-green-100 text-green-700 px-5 py-2 rounded-full font-semibold shadow">
+
+                    <i class="ph-fill ph-medal"></i>
+
+                    {{ $badge }}
+
+                </span>
+
+            </div>
+
+            <!-- Total Carbon -->
+            <div class="text-center py-10">
+
+                <p class="text-gray-600 text-lg font-medium">
+                    Total Pengurangan Emisi
+                </p>
+
+                <h1 class="text-5xl font-bold text-[#46c43d] leading-none mt-3">
+
+                    {{ number_format($carbonSaved,2) }}
+
+                </h1>
+
+                <p class="text-xl font-semibold text-gray-600 mt-3">
+
+                    kg CO₂e
+
+                </p>
+
+            </div>
+
+            <!-- Statistik -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+
+                <!-- Plastik -->
+
+                <div class="bg-white rounded-2xl p-6 shadow border hover:shadow-lg transition">
+
+                    <div class="w-14 h-14 rounded-xl bg-green-100 flex items-center justify-center mb-4">
+
+                        <i class="ph-fill ph-jar text-3xl text-green-600"></i>
+
+                    </div>
+
+                    <p class="text-gray-500">
+                        Botol Plastik
+                    </p>
+
+                    <h2 class="text-4xl font-bold mt-2">
+                        {{ $plasticCount }}
+                    </h2>
+
+                    <p class="text-green-600 font-semibold mt-1">
+                        {{ number_format($plasticCarbon,2) }} kg CO₂e
+                    </p>
+
+                </div>
+
+                <!-- Kaleng -->
+
+                <div class="bg-white rounded-2xl p-6 shadow border hover:shadow-lg transition">
+
+                    <div class="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
+
+                        <i class="ph-fill ph-cylinder text-3xl text-blue-600"></i>
+
+                    </div>
+
+                    <p class="text-gray-500">
+                        Kaleng
+                    </p>
+
+                    <h2 class="text-4xl font-bold mt-2">
+                        {{ $canCount }}
+                    </h2>
+
+                    <p class="text-blue-600 font-semibold mt-1">
+                        {{ number_format($canCarbon,2) }} kg CO₂e
+                    </p>
+
+                </div>
+
+                <!-- Total Item -->
+
+                <div class="bg-white rounded-2xl p-6 shadow border hover:shadow-lg transition">
+
+                    <div class="w-14 h-14 rounded-xl bg-yellow-100 flex items-center justify-center mb-4">
+
+                        <i class="ph-fill ph-recycle text-3xl text-yellow-600"></i>
+
+                    </div>
+
+                    <p class="text-gray-500">
+                        Sampah Didaur Ulang
+                    </p>
+
+                    <h2 class="text-4xl font-bold mt-2">
+
+                        {{ $plasticCount + $canCount }}
+
+                    </h2>
+
+                    <p class="text-yellow-600 font-semibold mt-1">
+
+                        Item
+
+                    </p>
+
+                </div>
+
+                <!-- Pohon -->
+
+                <div class="bg-white rounded-2xl p-6 shadow border hover:shadow-lg transition">
+
+                    <div class="w-14 h-14 rounded-xl bg-emerald-100 flex items-center justify-center mb-4">
+
+                        <i class="ph-fill ph-tree-evergreen text-3xl text-emerald-600"></i>
+
+                    </div>
+
+                    <p class="text-gray-500">
+                        Setara Pohon
+                    </p>
+
+                    <h2 class="text-4xl font-bold mt-2">
+
+                        {{ number_format($treeEquivalent,2) }}
+
+                    </h2>
+
+                    <p class="text-emerald-600 font-semibold mt-1">
+
+                        Pohon
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Progress -->
+            <div class="mt-10">
+
+                <div class="flex justify-between mb-3">
+
+                    <span class="font-semibold text-gray-700">
+
+                        Target Bulanan
+
+                    </span>
+
+                    <span class="font-semibold text-[#46c43d]">
+
+                        {{ number_format($carbonSaved,2) }} / {{ $targetCarbon }} kg
+
+                    </span>
+
+                </div>
+
+                <div class="h-5 rounded-full bg-gray-200 overflow-hidden">
+
+                    <div
+                        class="h-full rounded-full bg-gradient-to-r from-green-500 to-lime-400 transition-all duration-700"
+                        style="width: {{ $progressCarbon }}%;">
+                    </div>
+
+                </div>
+
+                <div class="text-right mt-2 text-sm text-gray-500">
+
+                    {{ number_format($progressCarbon,0) }}% Target Tercapai
+
+                </div>
+
+            </div>
+
+            <!-- Eco Fact -->
+            <div class="mt-8 bg-green-100 rounded-2xl p-5 flex items-start gap-4">
+
+                <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center">
+
+                    <i class="ph-fill ph-lightbulb text-2xl text-yellow-500"></i>
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-bold text-green-700">
+                        Fakta Lingkungan
+                    </h3>
+
+                    <p class="text-gray-700 mt-1">
+
+                        Mendaur ulang satu botol plastik dapat mengurangi emisi karbon sekitar
+                        <strong>0,05 kg CO₂e</strong>.
+                        Teruskan kebiasaan baik Anda untuk membantu menjaga bumi.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
         <!-- Logout Section -->
         <div class="mt-10 text-center space-y-3">
             <p class="text-gray-600 text-sm">Silahkan logout jika sudah selesai</p>
@@ -93,7 +381,8 @@
                 @csrf
                 <button type="button" 
                     onclick="confirmLogout()" 
-                    class="bg-red-500 hover:bg-red-600 text-white text-lg font-semibold px-16 py-4 rounded-2xl shadow-lg transition">
+                    class="bg-red-600 hover:bg-red-600 text-white text-lg font-semibold px-16 py-4 rounded-2xl shadow-lg transition">
+                    <i class="ph-fill ph-sign-out"></i>
                     Logout
                 </button>
             </form>

@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Price extends Model
+class CarbonCalculator extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'name',
-        'price_per_point',
-        'price_per_kg',
-        'description',
+     protected $fillable = [
+        'waste_type',
+        'co2_factor',
+        'point_per_kg',
+        'tree_factor',
     ];
 }

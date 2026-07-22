@@ -27,13 +27,9 @@ class WithdrawalController extends Controller
             'metode' => $request->metode,
             'nomor' => $request->nomor,
             'jumlah' => $request->jumlah,
+            'status' => 'pending',
         ]);
 
-        // Kurangi saldo & poin sesuai jumlah
-        $user->balance -= $request->jumlah;
-        $user->points -= floor($request->jumlah / 50); // 1 poin = Rp 50
-        $user->save();
-
-        return redirect()->route('dashboard')->with('success', 'Penarikan berhasil! Saldo Anda telah diperbarui, dan saldo akan dikirim dalam 1x24 jam');
+        return redirect()->route('dashboard')->with('success', 'Pengajuan penarikan berhasil dikirim dan menunggu ACC admin.');
     }
 }

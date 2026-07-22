@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SiTukar - Login</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f0f4f8; /* abu muda lembut */
+            background: linear-gradient(135deg, #eefaf0 0%, #f8fffa 100%);
             font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
         }
         .login-card {
             background-color: white;
@@ -62,7 +64,21 @@
 </script>
 @endif
 
-<body class="min-h-screen flex flex-col items-center justify-center px-4">
+<body class="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
+
+<!-- Background Eco -->
+<div class="fixed inset-0 -z-10 opacity-10 pointer-events-none">
+
+    <div class="absolute left-0 bottom-0">
+        <i class="ph-fill ph-leaf text-[260px] text-green-500"></i>
+    </div>
+
+    <div class="absolute right-0 top-20">
+        <i class="ph-fill ph-recycle text-[220px] text-green-500"></i>
+    </div>
+
+</div>
+</div>
 
     <!-- Login Card -->
     <div class="login-card">
@@ -71,6 +87,20 @@
         </div>
         <h3 class="text-center text-gray-800 font-semibold mb-2 text-lg">Welcome User!</h3>
         <p class="text-center text-gray-600 text-sm mb-4">Masukkan email dan password Anda untuk login</p>
+       
+        @if ($errors->has('email'))
+        <div id="login-alert"
+            class="mb-4 rounded-xl border border-red-300 bg-red-50 px-4 py-3 shadow-sm">
+            <div class="flex items-start gap-3">
+                <i class="ph-fill ph-warning-circle text-red-600 text-xl mt-0.5"></i>
+                <div>
+                    <p class="text-sm text-red-600">
+                        {{ $errors->first('email') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        @endif
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
@@ -131,5 +161,20 @@
         }
     </script>
 
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const alert = document.getElementById('login-alert');
+
+        if (alert) {
+            setTimeout(function () {
+                alert.style.transition = 'opacity .3s ease';
+                alert.style.opacity = '0';
+                setTimeout(function () {
+                    alert.remove();
+                }, 300);
+            }, 4000);
+        }
+    });
+    </script>
 </body>
 </html>

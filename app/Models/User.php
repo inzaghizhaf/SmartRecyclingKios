@@ -24,6 +24,9 @@ class User extends Authenticatable
         'nomor_telepon',
         'password',
         'konfigurasi_password',
+        'role',
+        'points',
+        'balance',
     ];
 
     /**
@@ -45,4 +48,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class);
+    }
 }
