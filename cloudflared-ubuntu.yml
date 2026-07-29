@@ -1,0 +1,7 @@
+tunnel: a2892970-6167-48fa-91ec-179fb93cff13
+credentials-file: /home/lab-iot/.cloudflared/a2892970-6167-48fa-91ec-179fb93cff13.json
+
+ingress:
+  - hostname: smartrecyclingkiosk.dpdns.org
+    service: http://127.0.0.1:8000
+  - service: http_status:404

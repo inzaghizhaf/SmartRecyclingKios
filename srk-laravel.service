@@ -1,0 +1,16 @@
+[Unit]
+Description=Smart Recycling Kiosk Laravel application
+After=network.target mysql.service
+
+[Service]
+Type=simple
+User=lab-iot
+Group=lab-iot
+WorkingDirectory=/home/lab-iot/SmartRecyclingKios
+ExecStart=/usr/bin/php artisan serve --host=127.0.0.1 --port=8000
+Restart=always
+RestartSec=3
+Environment=HOME=/home/lab-iot
+
+[Install]
+WantedBy=multi-user.target
