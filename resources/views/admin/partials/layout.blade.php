@@ -43,12 +43,12 @@
 @endphp
 
 <div class="min-h-screen flex">
-    <aside class="w-64 bg-slate-800 text-white fixed inset-y-0 left-0">
-        <div class="h-16 bg-[#46c43d] flex items-center px-5 gap-3">
+    <aside class="fixed top-0 left-0 w-64 h-screen bg-slate-800 text-white flex flex-col">
+        <div class="h-16 bg-[#46c43d] flex items-center px-5 gap-3 shrink-0">
             <img src="{{ asset('images/srk2logo.png') }}" alt="Smart Recycling Kiosk" class="h-10 w-auto">
         </div>
 
-        <div class="px-5 py-6 flex items-center gap-3 border-b border-slate-700">
+        <div class="px-5 py-6 flex items-center gap-3 border-b border-slate-700 shrink-0">
             <img src="{{ asset('images/user-icon.png') }}" alt="Admin" class="w-12 h-12 rounded-full bg-white">
             <div>
                 <p class="font-bold leading-tight">{{ $currentUser->nama_lengkap ?? $currentUser->name }}</p>
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <nav class="p-4 space-y-2 text-sm font-semibold">
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2 text-sm font-semibold">
 
         {{-- Dashboard --}}
         <a class="sidebar-link {{ request()->routeIs('admin.dashboard') || request()->routeIs('super-admin.dashboard') ? 'active' : '' }} flex items-center gap-3 px-4 py-3 rounded-md"
@@ -128,8 +128,8 @@
     </nav>
     </aside>
 
-    <div class="ml-64 flex-1 min-h-screen">
-        <header class="h-16 bg-[#46c43d] text-white flex items-center justify-end px-6 shadow">
+    <div class="ml-64 flex-1 min-h-screen overflow-y-auto">
+        <header class="fixed top-0 left-64 right-0 h-16 bg-[#46c43d] text-white flex items-center justify-end px-6 shadow z-50">
             <div class="flex items-center gap-4">
                 <div class="bg-white text-slate-700 rounded-md px-4 py-2 text-sm font-semibold">
                     {{ now()->translatedFormat('l, d F Y') }}
@@ -145,7 +145,7 @@
 
         </header>
 
-        <main class="p-6">
+        <main class="pt-24 px-6 pb-6">
             @if(session('success'))
                 <div class="mb-5 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-green-700">{{ session('success') }}</div>
             @endif

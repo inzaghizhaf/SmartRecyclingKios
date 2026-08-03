@@ -542,5 +542,28 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
+
+#Auto Logout
+<script>
+    let idleTimer;
+    const IDLE_LIMIT = 120000; // 30 detik
+
+    function resetIdleTimer() {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(autoLogout, IDLE_LIMIT);
+    }
+
+    function autoLogout() {
+        // Logout otomatis tanpa dialog konfirmasi
+        document.getElementById('logoutForm').submit();
+    }
+
+    // Event yang dianggap "aktivitas user"
+    ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'click']
+        .forEach(evt => document.addEventListener(evt, resetIdleTimer));
+
+    // Mulai timer pertama kali halaman dimuat
+    resetIdleTimer();
+</script>
 </body>
 </html>

@@ -4,7 +4,7 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiTukar - Login</title>
+    <title>SmartRecyclingKiosk - Login</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
@@ -55,6 +55,40 @@
                 margin-top: 1.5rem;
             }
         }
+
+        /* Tombol Back di sebelah kiri Login Card */
+        .back-button {
+         position: absolute;
+         top: 40px;
+         left: calc(50% - 275px);
+
+         width: 64px;
+         height: 64px;
+
+         border: 2px solid #46c43d;
+         border-radius: 50%;
+         background-color: white;
+         color: #222;
+
+         display: flex;
+         align-items: center;
+         justify-content: center;
+
+         text-decoration: none;
+         box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+
+         transition: all 0.2s ease;
+         z-index: 10;
+    }
+
+    .back-button:hover {
+        background-color: #46c43d;
+        color: white;
+    }
+
+    .back-button i {
+        font-size: 25px;
+    }
     </style>
 </head>
 
@@ -64,7 +98,7 @@
 </script>
 @endif
 
-<body class="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
+<body class="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-y-auto py-8">
 
 <!-- Background Eco -->
 <div class="fixed inset-0 -z-10 opacity-10 pointer-events-none">
@@ -79,6 +113,11 @@
 
 </div>
 </div>
+
+    <!-- Tombol Back -->
+    <a href="javascript:history.back()" class="back-button" aria-label="Kembali">
+        <i class="ph ph-arrow-left"></i>
+    </a>
 
     <!-- Login Card -->
     <div class="login-card">
@@ -125,6 +164,12 @@
                 </span>
             </div>
 
+            <div class="mb-4 text-right">
+                <a href="{{ route('password.request') }}" class="text-sm text-[#46c43d] hover:underline font-semibold">
+                    Lupa password?
+                </a>
+            </div>
+
             <!-- Tombol Login -->
             <div class="mb-4">
                 <button type="submit">Login</button>
@@ -136,6 +181,10 @@
                 <a href="{{ route('register') }}" class="text-[#46c43d] hover:underline font-semibold">Daftar</a>
             </p>
         </form>
+
+        @if (session('status'))
+            <p class="mt-4 text-center text-sm text-green-700" role="status">{{ session('status') }}</p>
+        @endif
     </div>
 
     <!-- Logo Partner -->

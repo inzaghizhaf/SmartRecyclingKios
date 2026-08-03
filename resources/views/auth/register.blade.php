@@ -101,7 +101,7 @@
             outline: none;
         }
 
-        /* 🔘 Tombol */
+        /* Tombol */
         .btn-register {
             width: 100%;
             background-color: #46c43d;
@@ -119,7 +119,7 @@
             background-color: #46c43d;
         }
 
-        /* 🔗 Link ke login */
+        /* Link ke login */
         .login-link {
             text-align: center;
             margin-top: 1rem;
@@ -136,7 +136,7 @@
             text-decoration: underline;
         }
 
-        /* ⚙️ Footer */
+        /*  Footer */
         .footer {
             margin-top: 2rem;
             text-align: center;
@@ -154,7 +154,7 @@
             vertical-align: middle;
         }
 
-        /* 📱 Responsif */
+        /* Responsif */
         @media (max-width: 480px) {
             .register-box {
                 padding: 1.5rem;
@@ -166,6 +166,40 @@
                 width: 65px;
             }
         }
+
+        /* Tombol Back di sebelah kiri Login Card */
+        .back-button {
+         position: absolute;
+         top: 40px;
+         left: calc(50% - 275px);
+
+         width: 64px;
+         height: 64px;
+
+         border: 2px solid #46c43d;
+         border-radius: 50%;
+         background-color: white;
+         color: #222;
+
+         display: flex;
+         align-items: center;
+         justify-content: center;
+
+         text-decoration: none;
+         box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+
+         transition: all 0.2s ease;
+         z-index: 10;
+    }
+
+    .back-button:hover {
+        background-color: #46c43d;
+        color: white;
+    }
+
+    .back-button i {
+        font-size: 25px;
+    }
     </style>
 </head>
 
@@ -186,6 +220,11 @@
             </ul>
         </div>
     @endif
+
+    <!-- Tombol Back -->
+    <a href="javascript:history.back()" class="back-button" aria-label="Kembali">
+        <i class="ph ph-arrow-left"></i>
+    </a>
 
     <div class="register-box">
         <div class="logo" style="margin-bottom: 0.5rem;">
@@ -241,8 +280,9 @@
         </form>
 
         <div class="login-link">
-            <p>Sudah punya akun? 
-                <a href="{{ route('login') }}">Masuk di sini</a>
+            <p class="mt-5 text-center text-sm text-gray-600">
+                Sudah punya akun? 
+                <a href="{{ route('login') }}" class="font-semibold text-green-600 hover:underline">Masuk di sini</a>
             </p>
         </div>
     </div>

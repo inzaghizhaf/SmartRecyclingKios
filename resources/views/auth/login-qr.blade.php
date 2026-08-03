@@ -9,10 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-[#eefaf0] min-h-screen flex items-center justify-center relative overflow-hidden">
-
-        <!-- Background Eco -->
-        <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+<body class="bg-[#eefaf0] min-h-screen flex items-start justify-center relative overflow-y-auto overflow-x-hidden py-8">
+    <div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
 
         <!-- Daun -->
         <div class="absolute left-0 bottom-0 opacity-10">
@@ -34,20 +32,23 @@
         </div>
 
     </div>
+
     <!-- Card -->
-    <div class="relative bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl w-[450px] p-10 text-center border border-white">
+    <div class="relative bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl
+                w-[92%] max-w-[520px]
+                p-10 text-center border border-white">
 
         <h1 class="text-3xl font-bold text-green-700">
             Login dengan Barcode
         </h1>
 
         <p class="text-gray-600 mt-2">
-            Scan QR Code menggunakan aplikasi di HP Anda
+            Scan QR Code menggunakan Web di Smartphone Anda
         </p>
 
         <!-- QR -->
         <div class="mt-8 bg-gray-50 rounded-2xl p-5 shadow-inner">
-            <img src="{{ asset('images/qrcode.png') }}"
+            <img src="{{ asset('images/qrsrk.jpeg') }}"
                  class="w-64 mx-auto rounded-xl">
         </div>
 
