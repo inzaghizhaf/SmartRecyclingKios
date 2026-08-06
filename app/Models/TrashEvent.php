@@ -14,6 +14,7 @@ class TrashEvent extends Model
         'jenis_sampah',
         'poin',
         'nilai_rp',
+        'carbon_footprint',
         'sensor_proximity',
         'sensor_ultrasonic'
     ];

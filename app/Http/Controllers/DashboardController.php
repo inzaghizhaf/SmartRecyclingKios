@@ -15,6 +15,15 @@ class DashboardController extends Controller
     {
         $user = Auth::user()->fresh();
 
+        // Pembaca ESP32 hanya untuk user. Admin tetap masuk ke panelnya sendiri.
+        if ($user->role === 'super_admin') {
+            return redirect()->route('super-admin.dashboard');
+        }
+
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
         $events = TrashEvent::where('user_id',$user->id)
             ->latest()
             ->take(5)
@@ -30,27 +39,26 @@ class DashboardController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $plasticCount = TrashEvent::where('user_id',$user->id)
-            ->where('jenis_sampah','Botol Plastik')
-            ->count();
+        $plasticEvents = TrashEvent::where('user_id', $user->id)
+            ->whereIn('jenis_sampah', ['plastic', 'plastik', 'Botol Plastik']);
 
-        $canCount = TrashEvent::where('user_id',$user->id)
-            ->where('jenis_sampah','Kaleng')
-            ->count();
+        $canEvents = TrashEvent::where('user_id', $user->id)
+            ->whereIn('jenis_sampah', ['can', 'kaleng', 'Kaleng', 'Kaleng Aluminium']);
+
+        $plasticCount = (clone $plasticEvents)->count();
+        $canCount = (clone $canEvents)->count();
 
         /*
             Faktor Emisi
 
-            1 Botol PET
-            = 0.05 kg CO2e
-
-            1 Kaleng Aluminium
-            = 0.135 kg CO2e
+            Faktor tetap per item, bukan per berat atau ukuran kemasan:
+            1 botol PET = 0.09 kg CO2e
+            1 kaleng aluminium = 0.08 kg CO2e
         */
 
-        $plasticCarbon = $plasticCount * 0.05;
+        $plasticCarbon = (float) (clone $plasticEvents)->sum('carbon_footprint');
 
-        $canCarbon = $canCount * 0.135;
+        $canCarbon = (float) (clone $canEvents)->sum('carbon_footprint');
 
         $carbonSaved = $plasticCarbon + $canCarbon;
 

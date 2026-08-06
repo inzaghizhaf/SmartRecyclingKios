@@ -18,7 +18,7 @@
 <div class="mb-6 flex justify-between items-center">
     <div>
         <h1 class="text-3xl font-extrabold text-slate-800">Carbon Calculator</h1>
-        <p class="text-slate-500">Kelola faktor emisi karbon untuk setiap jenis sampah</p>
+        <p class="text-slate-500">Kalkulator Carbon Footprint.</p>
     </div>
 
     <button
@@ -127,11 +127,6 @@
                     @endphp
 
                     <tr class="hover:bg-slate-50/60 transition searchable-row">
-
-                        <form id="form-{{ $item->id }}" action="{{ route('admin.carbon.update', $item->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-
                             <td class="px-5 py-4 text-slate-500">
                                 {{ $index + 1 }}
                             </td>
@@ -146,26 +141,12 @@
                             </td>
 
                             <td class="px-5 py-4 text-center">
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    name="co2_factor"
-                                    value="{{ $item->co2_factor }}"
-                                    readonly
-                                    class="w-24 text-center border border-transparent bg-transparent rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-green-400">
+                                {{ number_format($item->co2_factor, 2, ',', '.') }}
                             </td>
 
                             <td class="px-5 py-4 text-center">
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    name="point_per_kg"
-                                    value="{{ $item->point_per_kg }}"
-                                    readonly
-                                    class="w-20 text-center border border-transparent bg-transparent rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-green-400">
+                                {{ number_format($item->point_per_kg, 2, ',', '.') }}
                             </td>
-
-                            <input type="hidden" name="tree_factor" value="{{ $item->tree_factor }}">
 
                             <td class="px-5 py-4 text-center">
                                 <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-green-100 text-green-700">
@@ -181,27 +162,24 @@
                                 <div class="flex items-center justify-center gap-2">
                                     <button
                                         type="button"
-                                        data-editing="false"
-                                        onclick="toggleEdit(this, 'form-{{ $item->id }}')"
-                                        class="w-9 h-9 flex items-center justify-center rounded-lg bg-green-600 hover:bg-green-700 text-white transition">
-                                        <i class="ph-fill ph-pencil-simple"></i>
+                                        onclick="openCarbonEditModal(this)"
+                                        data-action="{{ route('admin.carbon.update', $item, false) }}"
+                                        data-waste-type="{{ $item->waste_type }}"
+                                        data-co2-factor="{{ $item->co2_factor }}"
+                                        data-point-per-kg="{{ $item->point_per_kg }}"
+                                        data-tree-factor="{{ $item->tree_factor }}"
+                                        class="rounded bg-blue-600 px-3 py-1 text-xs font-bold text-white transition hover:bg-blue-700">
+                                        Edit
                                     </button>
+                                    <form action="{{ route('admin.carbon.destroy', $item, false) }}" method="POST" onsubmit="return confirm('Hapus data ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="rounded bg-red-600 px-3 py-1 text-xs font-bold text-white transition hover:bg-red-700">
+                                            Hapus
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
-
-                        </form>
-
-                        <td class="px-2 py-4">
-                            <form action="{{ route('admin.carbon.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus data ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button
-                                    type="submit"
-                                    class="w-9 h-9 flex items-center justify-center rounded-lg bg-red-500 hover:bg-red-600 text-white transition">
-                                    <i class="ph-fill ph-trash"></i>
-                                </button>
-                            </form>
-                        </td>
 
                     </tr>
 
@@ -320,29 +298,58 @@
 
 </div>
 
-<script>
-    // Toggle mode edit inline pada baris tabel
-    function toggleEdit(btn, formId) {
-        const form = document.getElementById(formId);
-        const inputs = form.querySelectorAll('input[type="number"]');
-        const editing = btn.dataset.editing === 'true';
+<!-- Modal Edit -->
+<div id="modalEditCarbon" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/50 p-4" onclick="closeCarbonEditModal(event)">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl" onclick="event.stopPropagation()">
+        <div class="mb-5 flex items-start justify-between gap-4">
+            <div>
+                <h3 class="text-xl font-extrabold text-slate-800">Edit Carbon Calculator</h3>
+                <p class="mt-1 text-sm text-slate-500">Perbarui faktor per jenis sampah kemudian simpan perubahan.</p>
+            </div>
+            <button type="button" onclick="closeCarbonEditModal()" class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700" aria-label="Tutup form edit">
+                <i class="ph-bold ph-x text-lg"></i>
+            </button>
+        </div>
 
-        if (!editing) {
-            inputs.forEach(inp => {
-                inp.readOnly = false;
-                inp.classList.remove('border-transparent', 'bg-transparent');
-                inp.classList.add('border-gray-300', 'bg-white');
-            });
-            btn.innerHTML = '<i class="ph-fill ph-check"></i>';
-            btn.dataset.editing = 'true';
-            btn.classList.remove('bg-green-600', 'hover:bg-green-700');
-            btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
-        } else {
-            if (form.requestSubmit) {
-                form.requestSubmit();
-            } else {
-                form.submit();
-            }
+        <form id="editCarbonForm" method="POST" class="grid gap-4">
+            @csrf
+            @method('PUT')
+            <label class="grid gap-1.5 text-sm font-semibold text-slate-700">Jenis Sampah
+                <input id="editWasteType" name="waste_type" class="rounded-lg border border-slate-300 px-3 py-2.5 font-normal focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200" required>
+            </label>
+            <label class="grid gap-1.5 text-sm font-semibold text-slate-700">Faktor CO₂e <span class="font-normal text-slate-400">(kg CO₂e/item)</span>
+                <input id="editCo2Factor" type="number" step="0.01" min="0" name="co2_factor" class="rounded-lg border border-slate-300 px-3 py-2.5 font-normal focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200" required>
+            </label>
+            <label class="grid gap-1.5 text-sm font-semibold text-slate-700">Poin per Item
+                <input id="editPointPerKg" type="number" step="0.01" min="0" name="point_per_kg" class="rounded-lg border border-slate-300 px-3 py-2.5 font-normal focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200" required>
+            </label>
+            <label class="grid gap-1.5 text-sm font-semibold text-slate-700">Tree Factor
+                <input id="editTreeFactor" type="number" step="0.0001" min="0" name="tree_factor" class="rounded-lg border border-slate-300 px-3 py-2.5 font-normal focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200" required>
+            </label>
+            <div class="mt-2 flex justify-end gap-3">
+                <button type="button" onclick="closeCarbonEditModal()" class="rounded-lg bg-slate-100 px-4 py-2.5 font-bold text-slate-700 hover:bg-slate-200">Batal</button>
+                <button class="rounded-lg bg-green-600 px-4 py-2.5 font-bold text-white hover:bg-green-700">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openCarbonEditModal(button) {
+        const form = document.getElementById('editCarbonForm');
+
+        form.action = button.dataset.action;
+        document.getElementById('editWasteType').value = button.dataset.wasteType;
+        document.getElementById('editCo2Factor').value = button.dataset.co2Factor;
+        document.getElementById('editPointPerKg').value = button.dataset.pointPerKg;
+        document.getElementById('editTreeFactor').value = button.dataset.treeFactor;
+        document.getElementById('modalEditCarbon').classList.remove('hidden');
+        document.getElementById('editWasteType').focus();
+    }
+
+    function closeCarbonEditModal(event) {
+        if (!event || event.target === document.getElementById('modalEditCarbon')) {
+            document.getElementById('modalEditCarbon').classList.add('hidden');
         }
     }
 

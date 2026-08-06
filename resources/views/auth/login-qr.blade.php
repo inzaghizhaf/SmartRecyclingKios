@@ -7,6 +7,31 @@
     <title>Login Barcode | Smart Recycling</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <style> /* Tombol Back di sebelah kiri Login Card */
+        .back-button {
+         position: absolute;
+         top: 35px;
+         left: calc(50% - 350px);
+
+         width: 64px;
+         height: 64px;
+
+         border: 2px solid #46c43d;
+         border-radius: 50%;
+         background-color: white;
+         color: #222;
+
+         display: flex;
+         align-items: center;
+         justify-content: center;
+
+         text-decoration: none;
+         box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+
+         transition: all 0.2s ease;
+         z-index: 10;
+        }
+    </style>
 </head>
 
 <body class="bg-[#eefaf0] min-h-screen flex items-start justify-center relative overflow-y-auto overflow-x-hidden py-8">
@@ -32,6 +57,11 @@
         </div>
 
     </div>
+
+    <!-- Tombol Back -->
+    <a href="javascript:history.back()" class="back-button" aria-label="Kembali">
+        <i class="ph ph-arrow-left"></i>
+    </a>
 
     <!-- Card -->
     <div class="relative bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl

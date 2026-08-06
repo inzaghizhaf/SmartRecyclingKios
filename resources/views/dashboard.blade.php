@@ -161,7 +161,7 @@
                         </h2>
 
                         <p class="text-gray-600 text-base">
-                            Dampak positif dari aktivitas daur ulang Anda
+                            Akumulasi estimasi jejak karbon sampah yang Anda setorkan
                         </p>
 
                     </div>
@@ -183,7 +183,7 @@
             <div class="text-center py-10">
 
                 <p class="text-gray-600 text-lg font-medium">
-                    Total Pengurangan Emisi
+                    Total Jejak Karbon Tercatat
                 </p>
 
                 <h1 class="text-5xl font-bold text-[#46c43d] leading-none mt-3">
@@ -224,6 +224,7 @@
                     <p class="text-green-600 font-semibold mt-1">
                         {{ number_format($plasticCarbon,2) }} kg CO₂e
                     </p>
+                    <p class="text-xs text-gray-400 mt-1">0,09 kg CO₂e per botol</p>
 
                 </div>
 
@@ -248,6 +249,7 @@
                     <p class="text-blue-600 font-semibold mt-1">
                         {{ number_format($canCarbon,2) }} kg CO₂e
                     </p>
+                    <p class="text-xs text-gray-400 mt-1">0,08 kg CO₂e per kaleng</p>
 
                 </div>
 
@@ -543,10 +545,10 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-#Auto Logout
+@if(Auth::user()->role === 'user')
 <script>
     let idleTimer;
-    const IDLE_LIMIT = 120000; // 30 detik
+    const IDLE_LIMIT = 120000; // 2 menit
 
     function resetIdleTimer() {
         clearTimeout(idleTimer);
@@ -565,5 +567,6 @@ document.addEventListener("DOMContentLoaded", function() {
     // Mulai timer pertama kali halaman dimuat
     resetIdleTimer();
 </script>
+@endif
 </body>
 </html>

@@ -17,6 +17,9 @@ use App\Http\Controllers\Api\Esp32Controller;
 // === [1] ESP32 kirim data sensor (utama) ===
 Route::post('/esp32/input', [Esp32Controller::class, 'input']);
 
+// === [1b] ESP32 kirim lokasi GPS mesin ===
+Route::post('/esp32/location', [Esp32Controller::class, 'location']);
+
 // === [2] Laravel simpan user_id dari user yang login ===
 Route::post('/esp32/set-user', function (Request $request) {
     $user_id = $request->input('user_id');

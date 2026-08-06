@@ -44,6 +44,8 @@ Route::get('/login-barcode', function () {
 
 // Dashboard hanya untuk user login
 Route::middleware(['auth'])->group(function () {
+    // Dashboard pembaca ESP32 dapat dibuka seluruh akun yang sudah login.
+    // Auto-logout dua menit tetap hanya diterapkan pada role user di halaman ini.
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Tarik saldo
@@ -175,6 +177,10 @@ Route::middleware(['auth', 'role:super_admin'])
     ->group(function () {
 
     Route::get('/', [AdminPanelController::class, 'dashboard'])->name('dashboard');
+
+    // Lacak mesin GPS (khusus super admin)
+    Route::get('/lacak-mesin', [AdminPanelController::class, 'machineTracking'])->name('machines.index');
+    Route::get('/lacak-mesin/data', [AdminPanelController::class, 'machineTrackingData'])->name('machines.data');
 
     // CRUD Admin
     Route::get('/admins', [AdminPanelController::class, 'admins'])->name('admins.index');

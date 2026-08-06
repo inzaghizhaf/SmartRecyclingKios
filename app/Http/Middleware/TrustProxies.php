@@ -12,7 +12,9 @@ class TrustProxies extends Middleware
      *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    // Aplikasi berada di belakang Cloudflare Tunnel/reverse proxy. Percayai
+    // header X-Forwarded agar Laravel mempertahankan skema HTTPS asli.
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.

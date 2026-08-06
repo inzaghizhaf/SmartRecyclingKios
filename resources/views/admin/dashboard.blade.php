@@ -4,7 +4,7 @@
         <p class="text-slate-500">Selamat datang kembali, {{ $user->nama_lengkap ?? $user->name }}.</p>
     </div>
 
-    <div class="grid {{ $isSuperAdmin ? 'grid-cols-5' : 'grid-cols-4' }} gap-5 mb-6">
+    <div class="grid grid-cols-4 gap-5 mb-6">
 
         {{-- Total User --}}
         <div class="bg-green-50 border border-green-100 rounded-xl p-5 shadow-sm hover:shadow-md transition">
@@ -36,20 +36,6 @@
             </div>
         </div>
 
-        {{-- Total Mesin --}}
-        <div class="bg-orange-50 border border-orange-100 rounded-xl p-5 shadow-sm hover:shadow-md transition">
-            <div class="flex items-center gap-4">
-
-                <div class="w-14 h-14 rounded-xl bg-orange-100 flex items-center justify-center">
-                    <i class="ph-fill ph-desktop text-3xl text-orange-600"></i>
-                </div>
-                <div>
-                    <p class="text-sm font-bold text-slate-600">Total Mesin</p>
-                    <p class="text-3xl font-extrabold mt-1">{{ $stats['machines'] }}</p>
-                    <p class="text-xs text-slate-500">Mesin aktif</p>
-                </div>
-            </div>
-        </div>
         @endif
 
         {{-- Pending --}}

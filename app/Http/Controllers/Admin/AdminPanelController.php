@@ -8,6 +8,7 @@ use App\Models\Price;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Withdrawal;
+use App\Models\Machine;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +28,6 @@ class AdminPanelController extends Controller
             'pending' => Withdrawal::where('status', 'pending')->count(),
             'approved' => Withdrawal::where('status', 'approved')->count(),
             'balance' => User::sum('balance'),
-            'machines' => 0,
         ];
 
         $recentWithdrawals = Withdrawal::with('user')
@@ -54,6 +54,23 @@ class AdminPanelController extends Controller
             'chartLabels',
             'chartValues'
         ));
+    }
+
+    public function machineTracking()
+    {
+        $machines = Machine::orderBy('device_id')->get();
+
+        return view('admin.machines.index', [
+            'machines' => $this->machinePayload($machines),
+        ]);
+    }
+
+    public function machineTrackingData()
+    {
+        return response()->json([
+            'machines' => $this->machinePayload(Machine::orderBy('device_id')->get()),
+            'updated_at' => now()->toIso8601String(),
+        ]);
     }
 
     public function users(Request $request)
@@ -166,7 +183,7 @@ class AdminPanelController extends Controller
 
     public function updateAdmin(Request $request, User $user)
     {
-        abort_if(auth()->user()->role !== 'super_admin', 403);
+        abort_unless(in_array(auth()->user()->role, ['admin', 'super_admin'], true), 403);
 
         abort_if($user->role !== 'admin', 404);
 
@@ -339,26 +356,39 @@ class AdminPanelController extends Controller
 
     public function storeCarbonCalculator(Request $request)
     {
-        $request->validate([
-            'waste_type' => 'required',
-            'co2_factor' => 'required|numeric',
-            'point_per_kg' => 'required|numeric',
-            'tree_factor' => 'required|numeric',
+        $data = $request->validate([
+            'waste_type' => ['required', 'string', 'max:255'],
+            'co2_factor' => ['required', 'numeric', 'min:0'],
+            'point_per_kg' => ['required', 'numeric', 'min:0'],
+            'tree_factor' => ['required', 'numeric', 'min:0'],
         ]);
 
-        CarbonCalculator::create([
-            'waste_type' => $request->waste_type,
-            'co2_factor' => $request->co2_factor,
-            'point_per_kg' => $request->point_per_kg,
-            'tree_factor' => $request->tree_factor,
-        ]);
+        CarbonCalculator::create($data);
+        $this->log('Menambah faktor carbon ' . $data['waste_type']);
 
         return back()->with('success','Data berhasil ditambahkan');
     }
 
+    public function updateCarbonCalculator(Request $request, CarbonCalculator $calculator)
+    {
+        $data = $request->validate([
+            'waste_type' => ['required', 'string', 'max:255'],
+            'co2_factor' => ['required', 'numeric', 'min:0'],
+            'point_per_kg' => ['required', 'numeric', 'min:0'],
+            'tree_factor' => ['required', 'numeric', 'min:0'],
+        ]);
+
+        $calculator->update($data);
+        $this->log('Memperbarui faktor carbon ' . $calculator->waste_type);
+
+        return back()->with('success', 'Data Carbon Calculator berhasil diperbarui.');
+    }
+
     public function destroyCarbonCalculator(CarbonCalculator $calculator)
     {
+        $wasteType = $calculator->waste_type;
         $calculator->delete();
+        $this->log('Menghapus faktor carbon ' . $wasteType);
 
         return back()->with('success','Data berhasil dihapus');
     }
@@ -369,5 +399,28 @@ class AdminPanelController extends Controller
             'admin_id' => auth()->id(),
             'activity' => $activity,
         ]);
+    }
+
+    private function machinePayload($machines)
+    {
+        return $machines->map(function (Machine $machine) {
+            $state = $machine->status === 'maintenance'
+                ? 'maintenance'
+                : ($machine->last_seen && $machine->last_seen->gte(now()->subMinutes(5)) ? 'online' : 'offline');
+
+            return [
+                'id' => $machine->id,
+                'device_id' => $machine->device_id,
+                'name' => $machine->name ?: $machine->device_id,
+                'latitude' => $machine->latitude,
+                'longitude' => $machine->longitude,
+                'location_name' => $machine->location_name,
+                'status' => $state,
+                'satellites' => $machine->satellites,
+                'signal_strength' => $machine->signal_strength,
+                'last_seen' => optional($machine->last_seen)->toIso8601String(),
+                'last_seen_label' => optional($machine->last_seen)->diffForHumans(),
+            ];
+        })->values();
     }
 }

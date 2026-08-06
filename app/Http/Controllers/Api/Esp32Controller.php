@@ -7,11 +7,56 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\TrashEvent;
 use App\Models\DailyHistory;
+use App\Models\Machine;
+use App\Models\CarbonCalculator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class Esp32Controller extends Controller
 {
+    /**
+     * Menerima pembaruan GPS dari ESP32.
+     * Contoh payload: {"device_id":"SRK-001-GPS","latitude":-7.5755,"longitude":110.8243}
+     */
+    public function location(Request $request)
+    {
+        $data = $request->validate([
+            'device_id' => ['required', 'string', 'max:100'],
+            'latitude' => ['required', 'numeric', 'between:-90,90'],
+            'longitude' => ['required', 'numeric', 'between:-180,180'],
+            'name' => ['nullable', 'string', 'max:100'],
+            'location_name' => ['nullable', 'string', 'max:255'],
+            'satellites' => ['nullable', 'integer', 'between:0,99'],
+            'signal_strength' => ['nullable', 'integer', 'between:0,100'],
+            'status' => ['nullable', 'in:online,maintenance'],
+        ]);
+
+        $machine = Machine::firstOrNew(['device_id' => $data['device_id']]);
+        $machine->fill([
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
+            'last_seen' => now(),
+        ]);
+
+        foreach (['name', 'location_name', 'satellites', 'signal_strength', 'status'] as $field) {
+            if (array_key_exists($field, $data)) {
+                $machine->{$field} = $data[$field];
+            }
+        }
+
+        if (!$machine->exists && !isset($data['status'])) {
+            $machine->status = 'online';
+        }
+
+        $machine->save();
+
+        return response()->json([
+            'message' => 'Lokasi mesin berhasil diperbarui',
+            'machine_id' => $machine->id,
+            'last_seen' => $machine->last_seen,
+        ]);
+    }
+
     public function input(Request $request)
     {
         $data = $request->validate([
@@ -45,12 +90,16 @@ class Esp32Controller extends Controller
             return response()->json(['message' => 'Tidak ada sampah terdeteksi']);
         }
 
-        DB::transaction(function () use ($user, $jenis, $poin, $nilai_rp, $data) {
+        $carbonFactor = CarbonCalculator::where('waste_type', $jenis === 'plastic' ? 'Botol Plastik' : 'Kaleng Aluminium')
+            ->value('co2_factor') ?? ($jenis === 'plastic' ? 0.09 : 0.08);
+
+        DB::transaction(function () use ($user, $jenis, $poin, $nilai_rp, $carbonFactor, $data) {
         TrashEvent::create([
             'user_id' => $user->id,
             'jenis_sampah' => $jenis,
             'poin' => $poin,
             'nilai_rp' => $nilai_rp,
+            'carbon_footprint' => $carbonFactor,
             'sensor_proximity' => $data['sensor_proximity'],
             'sensor_ultrasonic' => $data['sensor_ultrasonic'],
         ]);
@@ -87,6 +136,7 @@ class Esp32Controller extends Controller
             'jenis_sampah' => $jenis, // tambahkan biar tahu yang terdeteksi apa
             'user_points' => $user->points,
             'user_balance' => $user->balance,
+            'carbon_footprint' => $carbonFactor,
         ], 201);
     }
 }

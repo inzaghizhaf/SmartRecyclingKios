@@ -114,6 +114,15 @@
             <span>Carbon Calculator</span>
         </a>
 
+        {{-- Lacak Mesin - hanya super admin --}}
+        @if($isSuper)
+        <a class="sidebar-link {{ request()->routeIs('super-admin.machines.*') ? 'active' : '' }} flex items-center gap-3 px-4 py-3 rounded-md"
+            href="{{ route('super-admin.machines.index') }}">
+            <i class="ph-fill ph-map-pin text-xl"></i>
+            <span>Lacak Mesin</span>
+        </a>
+        @endif
+
         {{-- Logout --}}
         <form id="logoutForm" action="{{ route('logout') }}" method="POST" class="pt-2">
             @csrf
